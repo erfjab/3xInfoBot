@@ -43,6 +43,11 @@ func main() {
 
 	bot := core.NewBot(cfg.TelegramBotToken)
 
+	if cfg.SocksProxy != "" {
+		bot.SetProxy(cfg.SocksProxy)
+		log.Printf("Using SOCKS proxy: %s", cfg.SocksProxy)
+	}
+
 	getBotInfo, err := bot.GetMe()
 	if err != nil {
 		log.Fatalf("error getting bot info: %v", err)

@@ -13,6 +13,7 @@ type Config struct {
 	PanelUsername       string `mapstructure:"PANEL_USERNAME"`
 	PanelPassword       string `mapstructure:"PANEL_PASSWORD"`
 	PanelTwoFactorCode  string `mapstructure:"PANEL_TWO_FACTOR_CODE"`
+	SocksProxy          string `mapstructure:"SOCKS_PROXY"`
 }
 
 var Cfg *Config
@@ -61,6 +62,14 @@ func (c *Config) validate() error {
 	if c.PanelPassword == "" {
 		return errors.New("PANEL_PASSWORD cannot be empty")
 	}
-
+	if c.SocksProxy != "" {
+		if !isValidSocksProxy(c.SocksProxy) {
+			return errors.New("SOCKS_PROXY must be in the format socks5://host:port")
+		}
+	}
 	return nil
+}
+
+func isValidSocksProxy(proxy string) bool {
+	return len(proxy) > 9 && proxy[:9] == "socks5://"
 }
